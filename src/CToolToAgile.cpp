@@ -43,7 +43,7 @@ bool CToolToAgile::mapPathToAgileMap(const char * imagePath)
 	remove(newFileName.c_str());
 	
 	if(write(newFileName.c_str())==0) {
-		cout << "\nImage successfully written!\n\nThe new image'name is:" << newFileName <<endl;
+		cout << "\nImage successfully written!\n\nThe new image'name is: " << newFileName <<endl;
 		return true;
 	}else
 		return false;
@@ -91,6 +91,8 @@ int CToolToAgile::read(const char *fileName) {
 	f.ReadKey("CRVAL2", &m_ba2);
 	f.ReadKey("LONPOLE", &m_lonpole);
 	/// Optional keywords
+	f.ReadKey("CTYPE1", ctype1, "");
+	f.ReadKey("CTYPE2", ctype2, "");
 	f.ReadKey("MINENG", &m_emin, 0);
 	f.ReadKey("MAXENG", &m_emax, 99999);
 	f.ReadKey("INDEX", &m_mapIndex, -2.1);
@@ -137,8 +139,8 @@ int CToolToAgile::write(const char * fileName) {
 	fits_create_img(f, bitpix, naxis, naxes, f);
 	fits_write_pix(f, TDOUBLE, fpixel, mat.Size(), const_cast<double*>(mat.Buffer()), f);
 
-	f.WriteKey("CTYPE1", "GLON-ARC");
-	f.WriteKey("CTYPE2", "GLAT-ARC");
+	f.WriteKey("CTYPE1", ctype1);
+	f.WriteKey("CTYPE2", ctype2);
 	f.WriteKey("CRPIX1", m_x0);
 	f.WriteKey("CRVAL1", m_la2);
 	f.WriteKey("CDELT1", m_xbin);

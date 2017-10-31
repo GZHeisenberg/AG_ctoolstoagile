@@ -52,6 +52,8 @@ class CToolToAgile : public AgileMap
 		/// Mandatory for this map to make sense
 		/// CTYPE1 = GLON-ARC
 		/// CTYPE2 = GLAT-ARC
+		char ctype1[32];	///CTYPE1
+		char ctype2[32];	///CTYPE2
 		double m_xbin;		/// CDELT1
 		double m_ybin;		/// CDELT2
 		double m_x0;		/// CRPIX1
