@@ -4,7 +4,9 @@ AG_ctooltoagile esegue la modifica di un file fits in modo tale da renderlo util
 
 ### Esempio di utilizzo
 
-	./bin/AG_ctooltoagile nomefile.fits
+	./bin/AG_ctooltoagile cntcube.fits
+	
+	./bin/AG_ctooltoagile ../cntcube.fits
 
 ### Input:
 
