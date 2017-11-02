@@ -20,28 +20,21 @@
 #include "AgileMap.h"
 
 
-class CToolToAgile : public AgileMap
+class CToolsToAgile : public AgileMap
 {
 	public:
 
 		// Constructor
-		CToolToAgile(const char * imagePath);
+		CToolsToAgile(const char * imagePath, const char * newFileName);
 		
-		// Convert an image in a **double matrix
-		//double ** mapPathToDoublePtr(const char * imagePath);
-
 		// Convert fits image in readble fits image	
-		bool mapPathToAgileMap(const char * imagePath); 
+		int mapPathToAgileMap(const char * newFileName); 
 
 
 			
-		// Getters
-		//int getRows();
-		//int getCols();
-		//double ** getImage();
-
 	private:
 		const char * imagePath;
+		const char * newFileName;
 		double ** image;
 		int rows;
 		int cols;

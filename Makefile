@@ -15,7 +15,7 @@
 #	* uninstall: add or remove the files and directories that should be uninstalled
 #############################################################################
 
-PROJECT= AG_ctooltoagile
+PROJECT= AG_ctoolstoagile
 SHELL = /bin/sh
 
 ####### 1) Project names and system
@@ -25,7 +25,7 @@ SYSTEM= $(shell gcc -dumpmachine)
 LINKERENV= cfitsio, pil, wcs, agile
 
 # Applications
-AG_EXE = AG_ctooltoagile
+AG_EXE = AG_ctoolstoagile
 
 # Libraries
 AGILE_MAP = AgileMap

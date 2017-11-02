@@ -15,13 +15,14 @@
 #include <string.h>
 #include <PilParams.h>
 
-#include "CToolToAgile.h"
+#include "CToolsToAgile.h"
 
 using namespace std;
 
 
 const PilDescription paramsDescr[] = {
     { PilString, "fitsfilePath", "Input fits file name to convert" },
+    { PilString, "newFitsFileName", "Insert new name for the output fits file"},
     { PilNone, "", "" }
 };
 
@@ -29,8 +30,8 @@ const PilDescription paramsDescr[] = {
 int main(int argc, char *argv[]) {
 	cout << "############## AG_ctooltoagile ##############" << endl;
 	
-	if(argc > 2) {
-		cout << "\nOnly one argument expected\n" << endl;		
+	if(argc != 3) {
+		cout << "\nTwo arguments expected\n\n   - The input fits file name to convert\n   - The name for the output fits file\n" << endl;		
 		exit (EXIT_FAILURE);
 	}
 	
@@ -39,15 +40,16 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
 	
 	
-	// PARAMETRO OBBLIGATORI
+	// PARAMETRI OBBLIGATORI
 	
 	const char *fitsfilePath = params["fitsfilePath"];
+	const char *newFitsFileName = params["newFitsFileName"];
 	
 	
 	cout << "\nInput fitsfile path: " << fitsfilePath << endl;
 	
 	
-	CToolToAgile ctoolAgile(fitsfilePath);
+	CToolsToAgile ctoolAgile(fitsfilePath, newFitsFileName);
 	
 	
 	

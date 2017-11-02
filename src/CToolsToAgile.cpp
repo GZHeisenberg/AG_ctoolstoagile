@@ -10,48 +10,45 @@
  * https://github.com/Leofaber/MapConverter
 */
 
-#include "CToolToAgile.h"
+#include "CToolsToAgile.h"
 #include "AgileMap.h"
 
 using namespace std;
 
-CToolToAgile::CToolToAgile(const char * _imagePath) {
+CToolsToAgile::CToolsToAgile(const char * _imagePath, const char * _newFileName) {
 	
 	imagePath = _imagePath;
+	newFileName = _newFileName;
 	read(imagePath);
 	
-	if(!mapPathToAgileMap(imagePath))
-		cout << "ERROR Writing Map in MapConverter!" << endl;
+	if(mapPathToAgileMap(newFileName)==0) {
+		cout << "\nImage successfully written!\n\nThe new image'name is: " << newFileName <<endl;
+	}else{
+		cout << "\nFile not created!" << endl;
+		exit(EXIT_FAILURE);
+	}
 		
 }
 
 
 
-bool CToolToAgile::mapPathToAgileMap(const char * imagePath)
+int CToolsToAgile::mapPathToAgileMap(const char * _newFileName)
 {
-	string newFileName(imagePath);
 	
-	size_t foundPatternDot = newFileName.find(".fits");
-	 
-	newFileName = newFileName.substr(0,foundPatternDot);
-	//cout << "imageName senza . : " << newFileName << endl;
+	string newFileName(_newFileName);
 	
-	
-	newFileName.append("CToolToAgile.fits");
 	
 	
 	remove(newFileName.c_str());
 	
-	if(write(newFileName.c_str())==0) {
-		cout << "\nImage successfully written!\n\nThe new image'name is: " << newFileName <<endl;
-		return true;
-	}else
-		return false;
+	return write(newFileName.c_str()); 
+		
+	
 	
 }
 
 
-int CToolToAgile::read(const char *fileName) {
+int CToolsToAgile::read(const char *fileName) {
 	m_fileName[0] = 0;
 
 	FitsFile f;
@@ -121,7 +118,7 @@ int CToolToAgile::read(const char *fileName) {
 	return f.Status();
 }
 
-int CToolToAgile::write(const char * fileName) {
+int CToolsToAgile::write(const char * fileName) {
 	
 	FitsFile f;
 	if (!f.Create(fileName)) {
@@ -139,8 +136,10 @@ int CToolToAgile::write(const char * fileName) {
 	fits_create_img(f, bitpix, naxis, naxes, f);
 	fits_write_pix(f, TDOUBLE, fpixel, mat.Size(), const_cast<double*>(mat.Buffer()), f);
 
-	f.WriteKey("CTYPE1", ctype1);
-	f.WriteKey("CTYPE2", ctype2);
+	//f.WriteKey("CTYPE1", ctype1);
+	//f.WriteKey("CTYPE2", ctype2);
+	f.WriteKey("CTYPE1", "GLONG-ARC");
+	f.WriteKey("CTYPE2", "GLAT-ARC");
 	f.WriteKey("CRPIX1", m_x0);
 	f.WriteKey("CRVAL1", m_la2);
 	f.WriteKey("CDELT1", m_xbin);
@@ -182,17 +181,7 @@ int CToolToAgile::write(const char * fileName) {
 	return f.Status();
 }
 
-/*int MapConverter::getRows() {
-	return rows;
-}
 
-int MapConverter::getCols() {
-	return cols;
-}
-
-double ** MapConverter::getImage() {
-	return image;
-}*/
 
 
 

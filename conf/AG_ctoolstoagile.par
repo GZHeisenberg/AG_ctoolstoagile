@@ -1,0 +1,2 @@
+fitsfilePath,s,ql,"./../cntcube.fits",,, "Input fits file name to convert"
+newFitsFileName,s,ql, "newName.fits",,, "Insert new name for the output fits file"
