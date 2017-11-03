@@ -12,6 +12,8 @@
 
 #include "CToolsToAgile.h"
 #include "AgileMap.h"
+#include "wcs.h"
+#include "MathUtils.h"
 
 using namespace std;
 
@@ -20,6 +22,13 @@ CToolsToAgile::CToolsToAgile(const char * _imagePath, const char * _newFileName)
 	imagePath = _imagePath;
 	newFileName = _newFileName;
 	read(imagePath);
+	
+
+	Euler(m_la2,m_ba2, &ao1, &bo1,1);
+
+	
+	cout << "ao1: " << ao1 << " bo1: " << bo1 << endl;
+
 	
 	if(mapPathToAgileMap(newFileName)==0) {
 		cout << "\nImage successfully written!\n\nThe new image'name is: " << newFileName <<endl;
@@ -88,8 +97,9 @@ int CToolsToAgile::read(const char *fileName) {
 	f.ReadKey("CRVAL2", &m_ba2);
 	f.ReadKey("LONPOLE", &m_lonpole);
 	/// Optional keywords
-	f.ReadKey("CTYPE1", ctype1, "");
-	f.ReadKey("CTYPE2", ctype2, "");
+	//f.ReadKey("CTYPE1", ctype1, "");
+	//f.ReadKey("CTYPE2", ctype2, "");
+	f.ReadKey("RADECSYS", radecsys, "");
 	f.ReadKey("MINENG", &m_emin, 0);
 	f.ReadKey("MAXENG", &m_emax, 99999);
 	f.ReadKey("INDEX", &m_mapIndex, -2.1);
@@ -102,8 +112,8 @@ int CToolsToAgile::read(const char *fileName) {
 	f.ReadKey("DATE_END", m_dateEnd, "");	//added
 	f.ReadKey("TSTART", &m_tstart, 0.0);
 	f.ReadKey("TSTOP", &m_tstop, 0.0);
-	//f.ReadKey("TIME_OBS", &m_tobs, "");	//added
-	//f.ReadKey("TIME_END", &m_tend, "");	//added
+	f.ReadKey("TIME_OBS", m_tobs, "");	//added
+	f.ReadKey("TIME_END", m_tend, "");	//added
 	f.ReadKey("FOVMIN", &m_fovMin, 0.0);
 	f.ReadKey("FOV", &m_fovMax, 0.0);
 	f.ReadKey("ALBEDO", &m_albedo, 0.0);
@@ -138,17 +148,20 @@ int CToolsToAgile::write(const char * fileName) {
 
 	//f.WriteKey("CTYPE1", ctype1);
 	//f.WriteKey("CTYPE2", ctype2);
-	f.WriteKey("CTYPE1", "GLONG-ARC");
+	f.WriteKey("CTYPE1", "GLON-ARC");
 	f.WriteKey("CTYPE2", "GLAT-ARC");
 	f.WriteKey("CRPIX1", m_x0);
-	f.WriteKey("CRVAL1", m_la2);
+	f.WriteKey("CRVAL1", ao1);
 	f.WriteKey("CDELT1", m_xbin);
 	f.WriteKey("CRPIX2", m_y0);
-	f.WriteKey("CRVAL2", m_ba2);
+	f.WriteKey("CRVAL2", bo1);
 	f.WriteKey("CDELT2", m_ybin);
 	f.WriteKey("LONPOLE", m_lonpole);
 	f.WriteKey("MINENG", m_emin);
 	f.WriteKey("MAXENG", m_emax);
+	//f.WriteKey("CUNIT1", "deg     ");
+	//f.WriteKey("CUNIT2", "deg     ");
+	f.WriteKey("RADECSYS", radecsys);
 	f.WriteKey("INDEX", m_mapIndex);
 	f.WriteKey("SC-Z-LII", m_lp);
 	f.WriteKey("SC-Z-BII", m_bp);
@@ -160,8 +173,8 @@ int CToolsToAgile::write(const char * fileName) {
 		f.WriteKey("DATE-END", m_dateEnd);
 
 	f.WriteKey("TSTART", m_tstart);
-	//f.WriteKey("TIME_OBS", m_tobs);	//added
-	//f.WriteKey("TIME_END", m_tend);	//added
+	f.WriteKey("TIME_OBS", m_tobs);	//added
+	f.WriteKey("TIME_END", m_tend);	//added
 	f.WriteKey("TSTOP", m_tstop);
 	f.WriteKey("FOVMIN", m_fovMin);
 	f.WriteKey("FOV", m_fovMax);

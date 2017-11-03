@@ -18,6 +18,7 @@
 
 #include "ArrayOf.h"
 #include "AgileMap.h"
+#include "wcs.h"
 
 
 class CToolsToAgile : public AgileMap
@@ -40,19 +41,24 @@ class CToolsToAgile : public AgileMap
 		int cols;
 		int read(const char* fileName);
 		int write(const char* fileName);	// const
-
+		
+		//New CRVAL values
+		double ao1, bo1;
+		
 		/// Data
 		/// Mandatory for this map to make sense
 		/// CTYPE1 = GLON-ARC
 		/// CTYPE2 = GLAT-ARC
-		char ctype1[32];	///CTYPE1
-		char ctype2[32];	///CTYPE2
+		//char ctype1[32];	///CTYPE1
+		//char ctype2[32];	///CTYPE2
 		double m_xbin;		/// CDELT1
 		double m_ybin;		/// CDELT2
 		double m_x0;		/// CRPIX1
 		double m_y0;		/// CRPIX2
 		double m_la2;		/// CRVAL1
 		double m_ba2;		/// CRVAL2
+
+		char radecsys[32];	///RADECSYS
 		/// Specific data for Agile maps
 		double m_lonpole;	/// LONPOLE
 		double m_emin;		/// MINENG
