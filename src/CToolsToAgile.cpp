@@ -27,7 +27,7 @@ CToolsToAgile::CToolsToAgile(const char * _imagePath, const char * _newFileName)
 	Euler(m_la2,m_ba2, &ao1, &bo1,1);
 
 	
-	cout << "ao1: " << ao1 << " bo1: " << bo1 << endl;
+	//cout << "ao1: " << ao1 << " bo1: " << bo1 << endl;
 
 	
 	if(mapPathToAgileMap(newFileName)==0) {
