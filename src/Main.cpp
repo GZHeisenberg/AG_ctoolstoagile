@@ -30,11 +30,6 @@ const PilDescription paramsDescr[] = {
 int main(int argc, char *argv[]) {
 	cout << "############## AG_ctooltoagile ##############" << endl;
 	
-	if(argc != 3) {
-		cout << "\nTwo arguments expected\n\n   - The input fits file name to convert\n   - The name for the output fits file\n" << endl;		
-		exit (EXIT_FAILURE);
-	}
-	
 	PilParams params(paramsDescr);
     if (!params.Load(argc, argv))
         return EXIT_FAILURE;

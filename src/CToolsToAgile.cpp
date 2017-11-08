@@ -128,6 +128,9 @@ int CToolsToAgile::read(const char *fileName) {
 	return f.Status();
 }
 
+
+
+
 int CToolsToAgile::write(const char * fileName) {
 	
 	FitsFile f;
@@ -143,38 +146,46 @@ int CToolsToAgile::write(const char * fileName) {
 	int naxis = 2;
 	long naxes[2] = { mat.Cols(), mat.Rows() };
 	long fpixel[2] = { 1, 1 };
+	char startDateTime[32]="";
+	char stopDateTime[32]="";
+	
 	fits_create_img(f, bitpix, naxis, naxes, f);
 	fits_write_pix(f, TDOUBLE, fpixel, mat.Size(), const_cast<double*>(mat.Buffer()), f);
 
 	//f.WriteKey("CTYPE1", ctype1);
 	//f.WriteKey("CTYPE2", ctype2);
+	f.WriteKey("CRVAL1", ao1);
+	f.WriteKey("CRVAL2", bo1);
 	f.WriteKey("CTYPE1", "GLON-ARC");
 	f.WriteKey("CTYPE2", "GLAT-ARC");
 	f.WriteKey("CRPIX1", m_x0);
-	f.WriteKey("CRVAL1", ao1);
-	f.WriteKey("CDELT1", m_xbin);
 	f.WriteKey("CRPIX2", m_y0);
-	f.WriteKey("CRVAL2", bo1);
+	f.WriteKey("CDELT1", m_xbin);
 	f.WriteKey("CDELT2", m_ybin);
+	f.WriteKey("RADECSYS", radecsys);
 	f.WriteKey("LONPOLE", m_lonpole);
 	f.WriteKey("MINENG", m_emin);
 	f.WriteKey("MAXENG", m_emax);
-	//f.WriteKey("CUNIT1", "deg     ");
-	//f.WriteKey("CUNIT2", "deg     ");
-	f.WriteKey("RADECSYS", radecsys);
 	f.WriteKey("INDEX", m_mapIndex);
 	f.WriteKey("SC-Z-LII", m_lp);
 	f.WriteKey("SC-Z-BII", m_bp);
 	f.WriteKey("SC-LONPL", m_gp);
+	
+	//Concatenate Date and Time observation
+	strcat(startDateTime,m_dateObs);
+	strcat(startDateTime,"T");
+	strcat(startDateTime,m_tobs);
+	
+	strcat(stopDateTime,m_dateEnd);
+	strcat(stopDateTime,"T");
+	strcat(stopDateTime,m_tend);
 
 	if (m_dateObs[0])
-		f.WriteKey("DATE-OBS", m_dateObs);
+		f.WriteKey("DATE-OBS", startDateTime);
 	if (m_dateEnd[0])
-		f.WriteKey("DATE-END", m_dateEnd);
+		f.WriteKey("DATE-END", stopDateTime);
 
 	f.WriteKey("TSTART", m_tstart);
-	f.WriteKey("TIME_OBS", m_tobs);	//added
-	f.WriteKey("TIME_END", m_tend);	//added
 	f.WriteKey("TSTOP", m_tstop);
 	f.WriteKey("FOVMIN", m_fovMin);
 	f.WriteKey("FOV", m_fovMax);
